@@ -38,6 +38,6 @@ class Network:
 
 def sigmoid(z):
     """ 
-    Normalizes input to range between 0 and 1
+    Normalizes input to range between 0 and 1.
     """
     return 1.0/(1.0 + np.exp(-z))
