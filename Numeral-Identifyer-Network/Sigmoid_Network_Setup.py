@@ -24,16 +24,47 @@ class Network:
             self.biases.append(np.random.randn(y, 1))
 
         for x, y in zip(neuronNums[:2], neuronNums[1:]):
-            self.weights.append(np.random.randn(y,x))
+            self.weights.append(np.random.randn(y, x))
 
     def feedforwardoutput(self, a):
         """Returns the output of the network given the input ``a`` where ``a`` is an array of 28 * 28 = 784
         pixels with greyscale values
         """
         for w, b in zip(self.weights, self.biases):
-            a = sigmoid(np.dot(w,a) + b)
+            a = sigmoid(np.dot(w, a) + b)
+        return a
 
+    def stochastic_gradient_descent(self, training_data, mini_batch_size, eta, epoches):
+        """
+        Trains the neural network using the stochastic gradient descent aglorithm. The ``training_data'' is 
+        randomly shuffled and seperated into ``mini_batches`` of size defined by ``mini_batch_size. Each ``mini_batch`` is evaluated to adjust the 
+        weights and biases of the network using the ``update_weights_and_biases`` function, whcih also requires the 
+        learning rate ``eta``.``epoches`` is the number of times the process described above will loop. In a single epoch,
+        all of the mini batches are iterated through to train the network. 
+        """
+        n = len(training_data)
+        mini_batches = []
+        for j in range(epoches):
+            random, shuffle(training_data)
+            for k in range(0, n, mini_batch_size):
+                mini_batches.append(training_data[k:k + mini_batch_size])
+            for mini_batch in mini_batches:
+                self.update_weights_and_biases(mini_batches, eta)
+            print "Epoch {0} completed".format(j)
 
+    def update_weights_and_biases(self, mini_batch, eta):
+        del_b = []
+        del_w = []
+        for b in self.biases:
+            del_b.append[np.zeros(b.shape)]
+        for w in self.weights:
+            del_w.append[np.zeros(w.shape)]
+        for x,y in mini_batch:
+            delta_del_b, delta_del_w = self.backpropogation(x,y)
+    
+    def backpropogation(self, x,y):
+        
+        
 
 
 def sigmoid(z):
@@ -41,3 +72,10 @@ def sigmoid(z):
     Normalizes input to range between 0 and 1.
     """
     return 1.0/(1.0 + np.exp(-z))
+
+
+def sigmoid_derivative(z):
+    """
+    Derivative of sigmoid function
+    """
+    return np.exp(-z)/((1 + np.exp(-z)) ^ 2)
