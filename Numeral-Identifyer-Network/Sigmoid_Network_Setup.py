@@ -36,8 +36,8 @@ class Network:
 
     def stochastic_gradient_descent(self, training_data, mini_batch_size, eta, epoches):
         """
-        Trains the neural network using the stochastic gradient descent aglorithm. The ``training_data'' is 
-        randomly shuffled and seperated into ``mini_batches`` of size defined by ``mini_batch_size. Each ``mini_batch`` is evaluated to adjust the 
+        Trains the neural network using the stochastic gradient descent aglorithm. The ``training_data`` is 
+        randomly shuffled and seperated into ``mini_batches`` of size defined by ``mini_batch_size``. Each ``mini_batch`` is evaluated to adjust the 
         weights and biases of the network using the ``update_weights_and_biases`` function, whcih also requires the 
         learning rate ``eta``.``epoches`` is the number of times the process described above will loop. In a single epoch,
         all of the mini batches are iterated through to train the network. 
@@ -53,18 +53,31 @@ class Network:
             print "Epoch {0} completed".format(j)
 
     def update_weights_and_biases(self, mini_batch, eta):
+        """
+        Updates weights and biases of the network using the training examples from a single mini-batch. 
+        ``delta_del_b`` and ``delta_del_w`` are each a list of arrays. The elements of each arrays are the partial 
+        derivatives of the cost function with respect to every bias and weight in the network. These partial
+        derivatives are summed over every training example in the ``mini_batch`` to get
+        ``del_b`` and ``del_w``. the ``weights`` and ``biases`` are then updated accordingly.
+        """
         del_b = []
         del_w = []
         for b in self.biases:
             del_b.append[np.zeros(b.shape)]
         for w in self.weights:
             del_w.append[np.zeros(w.shape)]
-        for x,y in mini_batch:
-            delta_del_b, delta_del_w = self.backpropogation(x,y)
-    
-    def backpropogation(self, x,y):
-        
-        
+        for x, y in mini_batch:
+            delta_del_b, delta_del_w = self.backpropogation(x, y)
+            del_b = [single_layer_del_b + single_layer_delta_del_b
+                     for single_layer_del_b, single_layer_delta_del_b in zip(del_b, delta_del_b)]
+            del_w = [single_layer_del_w + single_layer_delta_del_w
+                     for single_layer_del_w, single_layer_delta_del_w in zip(del_w, delta_del_w)]
+        self.weights = [w - (eta/len(mini_batch))*dw for w,
+                        nw in zip(self.weights, del_w)]
+        self.biases = [b - (eta/len(mini_batch))*db for b,
+                       db in zip(self.biases, del_b)]
+
+    def backpropogation(self, x, y):
 
 
 def sigmoid(z):
