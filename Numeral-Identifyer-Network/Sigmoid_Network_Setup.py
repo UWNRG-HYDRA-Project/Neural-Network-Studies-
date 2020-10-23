@@ -116,6 +116,9 @@ class Network:
         derivatives for C (cost function) with respect to each output activation.
         """
         return (output_activations - y)
+    
+    def evaluate(self, test_data):
+        test_resutls = 
 
 
 def sigmoid(z):
