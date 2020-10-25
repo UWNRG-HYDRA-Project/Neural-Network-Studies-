@@ -1,6 +1,6 @@
 """
 A module defining the network class containing the 
-stochastic gradient descent algorithm to optimize output correctness.
+stochastic gradient descent algorithm to optimize output correctness. Adapted from 
 
 """
 
@@ -118,7 +118,10 @@ class Network:
         return (output_activations - y)
     
     def evaluate(self, test_data):
-        test_resutls = 
+        test_results = [(np.argmax(self.feedforwardoutput(x)) ,y) for (x,y) in test_data]
+        for (x, y) in test_results:
+            correct = sum(int(x == y))
+        return correct 
 
 
 def sigmoid(z):
