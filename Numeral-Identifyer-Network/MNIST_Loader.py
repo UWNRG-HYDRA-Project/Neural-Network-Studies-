@@ -6,11 +6,12 @@
 import pickle
 import gzip
 import numpy as np
+ 
 
 
 def load_data():
-    f = gzip.open('../MNIST-Training-Data/mnist.pkl.gz', 'rb')
-    training_data, validation_data, test_data = pickle.load(f)
+    f = gzip.open('Numeral-Identifyer-Network/MNIST-Training-Data/mnist.pkl.gz', 'rb')
+    training_data, validation_data, test_data = pickle.load(f, encoding = 'latin1')
     f.close()
     return training_data, validation_data, test_data
 
@@ -34,3 +35,4 @@ def vectorized_result(y):
     vector = np.zeros(10, 1)
     vector[y] = 1.0
     return vector
+

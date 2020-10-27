@@ -34,13 +34,15 @@ class Network:
             a = sigmoid(np.dot(w, a) + b)
         return a
 
-    def stochastic_gradient_descent(self, training_data, mini_batch_size, eta, epoches):
+    def stochastic_gradient_descent(self, training_data, mini_batch_size, eta, epoches, test_data=None):
         """Trains the neural network using the stochastic gradient descent aglorithm. The ``training_data`` is 
         randomly shuffled and seperated into ``mini_batches`` of size defined by ``mini_batch_size``. Each ``mini_batch`` is evaluated to adjust the 
         weights and biases of the network using the ``update_weights_and_biases`` function, whcih also requires the 
         learning rate ``eta``.``epoches`` is the number of times the process described above will loop. In a single epoch,
         all of the mini batches are iterated through to train the network. 
         """
+        if test_data is not None:
+            n_tests = len(test_data)
         n = len(training_data)
         mini_batches = []
         for j in range(epoches):
@@ -49,7 +51,12 @@ class Network:
                 mini_batches.append(training_data[k:k + mini_batch_size])
             for mini_batch in mini_batches:
                 self.update_weights_and_biases(mini_batch, eta)
-            print("Epoch {0} completed".format(j))
+            if test_data is not None:
+                print("Epoch {0}: {1}/{2}".format(j,
+                                                  self.evaluate(test_data), n_tests))
+
+            else:
+                print("Epoch {0} completed".format(j))
 
     def update_weights_and_biases(self, mini_batch, eta):
         """Updates weights and biases of the network using the training examples from a single mini-batch. 
@@ -110,18 +117,18 @@ class Network:
             del_w[-i] = np.dot(error, activation_list[i - 1].transpose())
         return(del_b, del_w)
 
-
     def cost_prime(self, output_activations, y):
         """The derivative of the cost function used in the backpropogation algorithm. Returns a vector of
         derivatives for C (cost function) with respect to each output activation.
         """
         return (output_activations - y)
-    
+
     def evaluate(self, test_data):
-        test_results = [(np.argmax(self.feedforwardoutput(x)) ,y) for (x,y) in test_data]
+        test_results = [(np.argmax(self.feedforwardoutput(x)), y)
+                        for (x, y) in test_data]
         for (x, y) in test_results:
             correct = sum(int(x == y))
-        return correct 
+        return correct
 
 
 def sigmoid(z):
