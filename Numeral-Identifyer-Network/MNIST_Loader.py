@@ -1,22 +1,28 @@
-"""A module to load the MNIST image data for the number identifyer neural network. 
-
+"""
+A module to load the MNIST image data for the number identifyer neural network. 
 """
 
 
 import pickle
 import gzip
 import numpy as np
- 
 
 
 def load_data():
-    f = gzip.open('Numeral-Identifyer-Network/MNIST-Training-Data/mnist.pkl.gz', 'rb')
-    training_data, validation_data, test_data = pickle.load(f, encoding = 'latin1')
+    """Opens the nmist data file.
+    """
+    f = gzip.open(
+        'Numeral-Identifyer-Network/MNIST-Training-Data/mnist.pkl.gz', 'rb')
+    training_data, validation_data, test_data = pickle.load(
+        f, encoding='latin1')
     f.close()
     return training_data, validation_data, test_data
 
 
 def load_data_wrapper():
+    """Reshaps the data in the mnist.pkl.gz file to agree with the assumed array dimensions used in the 
+    stochastic gradient descent algorithm.
+    """
     tr_d, va_d, te_d = load_data()
 
     training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
@@ -32,7 +38,10 @@ def load_data_wrapper():
 
 
 def vectorized_result(y):
+    """Creats a 10 dimensional column vector containing a 1.0 in the nth row where n is the correct 
+    numeral. Takes the parameter ``y`` where ``y`` is the correct number corresponding to a particular 
+    sample. ``y`` could be 4, 5, 3, 6 etc.
+    """
     vector = np.zeros((10, 1))
     vector[y] = 1.0
     return vector
-
